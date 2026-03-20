@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: vehiclecheck-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: DVLA_API_KEY
+        sync: false
+      - key: DVSA_API_KEY
+        sync: false
+      - key: ALLOWED_ORIGINS
+        sync: false
