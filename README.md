@@ -101,23 +101,65 @@ Returns `{ "status": "ok" }`.
 
 ---
 
-## Deployment
+## Deployment (Railway + Vercel)
 
-### Backend — Railway / Render
+This is the recommended free hosting setup. It takes about 10 minutes.
 
-1. Connect your repo
-2. Set root directory to `backend/`
-3. Set environment variables: `DVLA_API_KEY`, `DVSA_API_KEY`, `ALLOWED_ORIGINS`
-4. Build command: `pip install -r requirements.txt`
-5. Start command: `gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT`
+### Step 1 — Push to GitHub
 
-### Frontend — Vercel
+```bash
+# From the CarChecker root
+git add .
+git commit -m "Initial commit"
+git push
+```
 
-1. Connect your repo
-2. Set root directory to `frontend/`
-3. Set environment variable: `VITE_API_URL=https://your-backend.railway.app`
-4. Build command: `npm run build`
-5. Output directory: `dist`
+> Make sure `.env` is in `.gitignore` (it already is) — never commit your API keys.
+
+---
+
+### Step 2 — Deploy backend to Railway
+
+1. Go to [railway.app](https://railway.app) and sign in with GitHub
+2. Click **New Project → Deploy from GitHub repo** and select this repo
+3. When asked, set the **root directory** to `backend`
+4. Railway will detect the Dockerfile automatically
+5. Go to your service → **Variables** tab and add:
+   | Key | Value |
+   |-----|-------|
+   | `DVLA_API_KEY` | your DVLA key |
+   | `DVSA_API_KEY` | your DVSA key (or leave blank to disable MOT) |
+   | `ALLOWED_ORIGINS` | `https://your-app.vercel.app` (add after step 3) |
+6. Click **Deploy** — Railway will build and give you a URL like `https://vehiclecheck.up.railway.app`
+
+---
+
+### Step 3 — Deploy frontend to Vercel
+
+1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
+2. Click **Add New → Project** and import this repo
+3. Set the **Root Directory** to `frontend`
+4. Under **Environment Variables**, add:
+   | Key | Value |
+   |-----|-------|
+   | `VITE_API_URL` | `https://your-backend.up.railway.app` |
+5. Click **Deploy** — Vercel gives you a URL like `https://vehiclecheck.vercel.app`
+
+---
+
+### Step 4 — Update CORS on the backend
+
+Now that you have your Vercel URL, go back to Railway → Variables and update:
+```
+ALLOWED_ORIGINS=https://your-app.vercel.app
+```
+Railway will redeploy automatically.
+
+---
+
+### That's it
+
+Every `git push` to your main branch will auto-redeploy both Railway and Vercel.
 
 ---
 
