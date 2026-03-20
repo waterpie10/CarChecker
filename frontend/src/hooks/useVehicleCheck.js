@@ -20,15 +20,22 @@ export function useVehicleCheck() {
 
     try {
       const { data } = await axios.post(`${API_BASE}/api/check`, body, {
-        timeout: 30_000,
+        timeout: 60_000,
       })
       setReport(data)
       return data
     } catch (err) {
-      const message =
-        err.response?.data?.detail ||
-        err.message ||
-        'Something went wrong. Please try again.'
+      let message
+      if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
+        message = `Cannot reach the backend server. Check that VITE_API_URL is set correctly on Vercel (currently: "${API_BASE || 'not set'}") and that ALLOWED_ORIGINS on Render includes your Vercel URL.`
+      } else if (err.code === 'ECONNABORTED') {
+        message = 'Request timed out — the backend may be waking up from sleep (Render free tier). Wait 30 seconds and try again.'
+      } else {
+        message =
+          err.response?.data?.detail ||
+          err.message ||
+          'Something went wrong. Please try again.'
+      }
       setError(message)
       return null
     } finally {
