@@ -20,8 +20,12 @@ router = APIRouter()
 _cache: TTLCache = TTLCache(maxsize=500, ttl=get_settings().cache_ttl_seconds)
 
 
+def _rate_limit() -> str:
+    return f"{get_settings().rate_limit_per_hour}/hour"
+
+
 @router.post("/api/check", response_model=VehicleReport)
-@limiter.limit("10/hour")
+@limiter.limit(_rate_limit)
 async def check_vehicle(request: Request, body: CheckRequest):
     settings = get_settings()
 
