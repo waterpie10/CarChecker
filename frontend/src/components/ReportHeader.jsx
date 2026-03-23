@@ -1,9 +1,18 @@
+import { useState } from 'react'
 import { riskColour } from '../utils/riskColours.js'
 import { capitalise, formatFuelType } from '../utils/formatters.js'
-import { Car, Fuel, Calendar, Palette } from 'lucide-react'
+import { Car, Fuel, Calendar, Palette, Link, Check, Download } from 'lucide-react'
 
 export default function ReportHeader({ report }) {
   const { bg, label, ring } = riskColour(report.risk_score)
+  const [copied, setCopied] = useState(false)
+
+  function handleShare() {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
 
   return (
     <div className="card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -44,6 +53,23 @@ export default function ReportHeader({ report }) {
         {report.vin && (
           <p className="text-xs text-gray-400 mt-1 font-mono">VIN: {report.vin}</p>
         )}
+        <div className="no-print mt-3 flex items-center gap-4">
+          <button
+            onClick={handleShare}
+            className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-blue-600 transition-colors"
+          >
+            {copied
+              ? <><Check size={13} className="text-green-500" /><span className="text-green-600">Link copied!</span></>
+              : <><Link size={13} /><span>Copy link</span></>}
+          </button>
+          <button
+            onClick={() => window.print()}
+            className="inline-flex items-center gap-1.5 text-xs text-gray-500 hover:text-blue-600 transition-colors"
+          >
+            <Download size={13} />
+            <span>Save as PDF</span>
+          </button>
+        </div>
       </div>
 
       {/* Risk score dial */}

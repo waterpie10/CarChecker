@@ -35,7 +35,7 @@ export default function Report() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Top bar */}
-      <div className="bg-blue-900 px-4 py-3 sticky top-0 z-10 shadow-md">
+      <div className="no-print bg-blue-900 px-4 py-3 sticky top-0 z-10 shadow-md">
         <div className="max-w-5xl mx-auto flex items-center gap-4 flex-wrap">
           <button
             onClick={() => navigate('/')}

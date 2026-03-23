@@ -25,3 +25,44 @@
     @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600;
   }
 }
+
+/* ── Print / Save as PDF ────────────────────────────────────────────────── */
+@media print {
+  /* Hide all interactive chrome */
+  .no-print {
+    display: none !important;
+  }
+
+  /* Clean white page */
+  body {
+    background: white !important;
+  }
+
+  /* Cards: keep border but drop shadows, avoid splitting across pages */
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #e5e7eb !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Don't break the grid mid-card */
+  .grid {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Ensure colours print (browsers suppress bg-colour by default) */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Tighten up spacing a little for print */
+  .max-w-5xl {
+    max-width: 100% !important;
+    padding: 0 12px !important;
+  }
+
+  /* Recharts SVGs print natively — nothing extra needed */
+}
