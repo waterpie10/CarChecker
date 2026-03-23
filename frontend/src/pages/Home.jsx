@@ -71,7 +71,7 @@ export default function Home() {
           Uses DVLA, DVSA, and NHTSA public APIs. Not affiliated with HPI, CarVertical, or DVLA.
         </p>
         <p className="text-blue-400 text-sm">
-          Made with love in 🐝⚡️💜 Manchester 🐝⚡️💜
+          Made with love in Manchester 🐝⚡️💜
         </p>
       </div>
     </div>
