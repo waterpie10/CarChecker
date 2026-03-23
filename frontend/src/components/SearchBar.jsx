@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Search } from 'lucide-react'
 
-export default function SearchBar({ onSearch, loading }) {
-  const [input, setInput] = useState('')
+export default function SearchBar({ onSearch, loading, initialValue = '' }) {
+  const [input, setInput] = useState(initialValue)
 
   function handleSubmit(e) {
     e.preventDefault()

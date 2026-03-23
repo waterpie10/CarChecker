@@ -45,7 +45,12 @@ export default function Report() {
             New check
           </button>
           <div className="flex-1 max-w-md">
-            <SearchBar onSearch={handleNewSearch} loading={loading} />
+            <SearchBar
+              key={registration}
+              initialValue={decodeURIComponent(registration || '')}
+              onSearch={handleNewSearch}
+              loading={loading}
+            />
           </div>
         </div>
       </div>
