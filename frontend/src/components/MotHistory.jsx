@@ -41,25 +41,23 @@ function MotTestRow({ test }) {
         </div>
       </button>
 
-      {open && (
-        <div className="px-4 pb-3 border-t border-gray-100 bg-gray-50 space-y-1.5">
-          {test.mot_test_number && (
-            <p className="text-xs text-gray-400 pt-2 font-mono">Test #{test.mot_test_number}</p>
-          )}
-          {test.expiry_date && (
-            <p className="text-xs text-gray-500">Certificate valid until: {formatDate(test.expiry_date)}</p>
-          )}
-          {test.defects?.length === 0 && (
-            <p className="text-xs text-gray-400 pt-2">No defects recorded.</p>
-          )}
-          {test.defects?.map((d, i) => (
-            <div key={i} className={`text-xs px-2 py-1.5 rounded ${DEFECT_COLOURS[d.type] || 'text-gray-600 bg-gray-50'}`}>
-              <span className="font-semibold mr-1">[{d.type}]</span>
-              {d.text}
-            </div>
-          ))}
-        </div>
-      )}
+      <div className={`mot-details px-4 pb-3 border-t border-gray-100 bg-gray-50 space-y-1.5 ${open ? '' : 'hidden'}`}>
+        {test.mot_test_number && (
+          <p className="text-xs text-gray-400 pt-2 font-mono">Test #{test.mot_test_number}</p>
+        )}
+        {test.expiry_date && (
+          <p className="text-xs text-gray-500">Certificate valid until: {formatDate(test.expiry_date)}</p>
+        )}
+        {test.defects?.length === 0 && (
+          <p className="text-xs text-gray-400 pt-2">No defects recorded.</p>
+        )}
+        {test.defects?.map((d, i) => (
+          <div key={i} className={`text-xs px-2 py-1.5 rounded ${DEFECT_COLOURS[d.type] || 'text-gray-600 bg-gray-50'}`}>
+            <span className="font-semibold mr-1">[{d.type}]</span>
+            {d.text}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

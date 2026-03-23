@@ -30,6 +30,8 @@ export function useVehicleCheck() {
         message = `Cannot reach the backend server. Check that VITE_API_URL is set in the Render dashboard for the frontend service (currently: "${API_BASE || 'not set'}") and that ALLOWED_ORIGINS on the backend includes the frontend URL.`
       } else if (err.code === 'ECONNABORTED') {
         message = 'Request timed out — the backend may be waking up from sleep (Render free tier). Wait 30 seconds and try again.'
+      } else if (err.response?.status === 429) {
+        message = "You've reached your limit of 10 searches per hour. Please try again in the next hour."
       } else {
         message =
           err.response?.data?.detail ||

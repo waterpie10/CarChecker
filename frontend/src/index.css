@@ -65,4 +65,9 @@
   }
 
   /* Recharts SVGs print natively — nothing extra needed */
+
+  /* Force all MOT accordion rows open */
+  .mot-details {
+    display: block !important;
+  }
 }

@@ -28,9 +28,6 @@ export default function Home() {
       {/* Hero */}
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-16 text-center">
         <div className="mb-8">
-          <span className="inline-block bg-yellow-300 text-blue-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-widest mb-4">
-            Free — No signup required
-          </span>
           <h1 className="text-4xl sm:text-5xl font-black text-white leading-tight">
             VehicleCheck UK
           </h1>
@@ -40,6 +37,9 @@ export default function Home() {
         </div>
 
         <SearchBar onSearch={handleSearch} loading={loading} />
+        <p className="text-blue-300 text-lg mt-3">
+          Currently restricted to 10 searches per hour so that I don't get in trouble with the DVLA's tech team.
+        </p>
 
         {error && (
           <div className="mt-4 max-w-md w-full bg-red-50 border border-red-200 rounded-lg px-4 py-3 text-sm text-red-700">
@@ -58,9 +58,21 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Footer strip */}
-      <div className="bg-blue-950 text-blue-400 text-xs text-center py-3 px-4">
-        Uses DVLA, DVSA, and NHTSA public APIs. Not affiliated with HPI, CarVertical, or DVLA.
+      {/* Personal note */}
+      <div className="bg-blue-950 px-6 py-6 text-center space-y-3">
+        <p className="text-blue-300 text-sm max-w-2xl mx-auto leading-relaxed">
+          This is a personal project I built to help me shop for my first car since I cannot afford paid
+          services like HPI and CarVertical. I hope you find it useful for your car shopping journey!
+          This project is not associated with the DVLA, HPI or CarVertical in any way. It has been built
+          with the assistance of Generative AI and is entirely designed to report the data from the free
+          DVLA Vehicle Data and MOT History APIs in an easily readable and accessible fashion.
+        </p>
+        <p className="text-blue-500 text-xs">
+          Uses DVLA, DVSA, and NHTSA public APIs. Not affiliated with HPI, CarVertical, or DVLA.
+        </p>
+        <p className="text-blue-400 text-sm">
+          Made with love in 🐝⚡️💜 Manchester 🐝⚡️💜
+        </p>
       </div>
     </div>
   )
