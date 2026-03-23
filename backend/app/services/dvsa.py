@@ -59,7 +59,18 @@ async def _get_access_token() -> str:
     retry=retry_if_exception_type(httpx.HTTPStatusError),
     reraise=True,
 )
-async def fetch_mot_history(registration: str) -> list[dict]:
+def _extract_vehicle(raw: dict) -> dict:
+    """Pull vehicle-level fields out of a DVSA response object."""
+    return {
+        "make":   raw.get("make"),
+        "model":  raw.get("model"),
+        "colour": raw.get("primaryColour"),
+        "fuel_type": raw.get("fuelType"),
+        "engine_cc": int(raw["engineSize"]) if raw.get("engineSize") else None,
+    }
+
+
+async def fetch_mot_history(registration: str) -> tuple[dict, list[dict]]:
     settings = get_settings()
 
     if not settings.dvsa_client_id:
@@ -79,7 +90,7 @@ async def fetch_mot_history(registration: str) -> list[dict]:
             )
 
             if response.status_code == 404:
-                return []
+                return {}, []
 
             if response.status_code == 401:
                 # Token may have just expired — clear cache and let retry handle it
@@ -95,15 +106,17 @@ async def fetch_mot_history(registration: str) -> list[dict]:
 
             if isinstance(data, list):
                 if not data:
-                    return []
-                return data[0].get("motTests", [])
+                    return {}, []
+                vehicle = data[0]
+                return _extract_vehicle(vehicle), vehicle.get("motTests", [])
             elif isinstance(data, dict):
                 vehicles = data.get("vehicles", [data])
                 if not vehicles:
-                    return []
-                return vehicles[0].get("motTests", [])
+                    return {}, []
+                vehicle = vehicles[0]
+                return _extract_vehicle(vehicle), vehicle.get("motTests", [])
 
-            return []
+            return {}, []
 
         except httpx.TimeoutException:
             raise DVSAError("DVSA API timed out")
@@ -111,7 +124,7 @@ async def fetch_mot_history(registration: str) -> list[dict]:
             raise DVSAError(f"Cannot reach DVSA API — DNS/connection failure: {e}") from e
         except httpx.HTTPStatusError as e:
             if e.response.status_code in (404, 204):
-                return []
+                return {}, []
             raise DVSAError(f"DVSA API error: {e.response.status_code}") from e
 
 

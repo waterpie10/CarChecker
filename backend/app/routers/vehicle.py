@@ -61,14 +61,15 @@ async def check_vehicle(request: Request, body: CheckRequest):
             if not body.vin:
                 raise HTTPException(status_code=503, detail=str(e))
 
-    # --- MOT History (registration required, skipped if DVSA_API_KEY not set) ---
+    # --- MOT History (registration required, skipped if DVSA credentials not set) ---
     mot_tests = []
+    dvsa_vehicle_data: dict = {}
     if registration:
-        if not settings.dvsa_api_key:
-            warnings.append("MOT history disabled — add DVSA_API_KEY to .env to enable.")
+        if not settings.dvsa_client_id:
+            warnings.append("MOT history disabled — add DVSA credentials to env to enable.")
         else:
             try:
-                raw_tests = await dvsa_service.fetch_mot_history(registration)
+                dvsa_vehicle_data, raw_tests = await dvsa_service.fetch_mot_history(registration)
                 mot_tests = dvsa_service.parse_mot_tests(raw_tests)
                 if mot_tests:
                     data_sources.append("DVSA MOT History API")
@@ -113,6 +114,7 @@ async def check_vehicle(request: Request, body: CheckRequest):
     # --- Build report ---
     report = build_report(
         dvla_data=dvla_data,
+        dvsa_vehicle_data=dvsa_vehicle_data,
         mot_tests=mot_tests,
         salvage_records=salvage_records,
         vin_data=vin_data,

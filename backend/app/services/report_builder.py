@@ -18,15 +18,17 @@ def build_report(
     data_sources: list[str],
     warnings: list[str],
     registration: str,
+    dvsa_vehicle_data: dict | None = None,
 ) -> VehicleReport:
+    dvsa = dvsa_vehicle_data or {}
 
-    # Merge DVLA + VIN data
-    make = dvla_data.get("make") or vin_data.get("make") or "Unknown"
-    model = vin_data.get("model")
+    # Merge across sources — priority: DVLA > DVSA > NHTSA
+    make = dvla_data.get("make") or dvsa.get("make") or vin_data.get("make") or "Unknown"
+    model = dvsa.get("model") or vin_data.get("model")
     year = dvla_data.get("year") or vin_data.get("year") or 0
-    colour = dvla_data.get("colour", "Unknown")
-    fuel_type = dvla_data.get("fuel_type", "Unknown")
-    engine_cc = dvla_data.get("engine_cc")
+    colour = dvla_data.get("colour") or dvsa.get("colour") or "Unknown"
+    fuel_type = dvla_data.get("fuel_type") or dvsa.get("fuel_type") or "Unknown"
+    engine_cc = dvla_data.get("engine_cc") or dvsa.get("engine_cc")
     transmission = vin_data.get("transmission")
     body_type = vin_data.get("body_type")
 
