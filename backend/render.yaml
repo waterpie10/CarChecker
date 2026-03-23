@@ -1,14 +1,2 @@
-services:
-  - type: web
-    name: vehiclecheck-backend
-    runtime: docker
-    dockerfilePath: ./Dockerfile
-    plan: free
-    healthCheckPath: /health
-    envVars:
-      - key: DVLA_API_KEY
-        sync: false
-      - key: DVSA_API_KEY
-        sync: false
-      - key: ALLOWED_ORIGINS
-        sync: false
+# This file is superseded by render.yaml at the repo root.
+# The root file defines both backend and frontend services.

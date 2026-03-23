@@ -27,7 +27,7 @@ export function useVehicleCheck() {
     } catch (err) {
       let message
       if (err.code === 'ERR_NETWORK' || err.message === 'Network Error') {
-        message = `Cannot reach the backend server. Check that VITE_API_URL is set correctly on Vercel (currently: "${API_BASE || 'not set'}") and that ALLOWED_ORIGINS on Render includes your Vercel URL.`
+        message = `Cannot reach the backend server. Check that VITE_API_URL is set in the Render dashboard for the frontend service (currently: "${API_BASE || 'not set'}") and that ALLOWED_ORIGINS on the backend includes the frontend URL.`
       } else if (err.code === 'ECONNABORTED') {
         message = 'Request timed out — the backend may be waking up from sleep (Render free tier). Wait 30 seconds and try again.'
       } else {
